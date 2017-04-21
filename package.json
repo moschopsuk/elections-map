@@ -1,0 +1,30 @@
+{
+  "name": "elections-map",
+  "version": "0.0.1",
+  "description": "LA1TV's D3 Elections interactive map",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:seed": "node scripts/dbseed.js"
+  },
+  "keywords": [
+    "d3",
+    "topojson",
+    "UK",
+    "elections",
+    "node",
+    "mongodb",
+    "socket.io"
+  ],
+  "author": "Luke Moscrop",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "chalk": "^1.1.3",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.5"
+  },
+  "devDependencies": {
+    "csv": "^1.1.1"
+  }
+}
