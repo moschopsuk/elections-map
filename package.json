@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:seed": "node scripts/dbseed.js"
+    "db:seed": "node scripts/dbseed.js",
+    "start": "node src/server.js"
   },
   "keywords": [
     "d3",
