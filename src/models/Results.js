@@ -12,7 +12,7 @@ const ResultSchema = new Schema({
     region: { type: String },
     type: { type: String },
   },
-  winningPartyCode: { type: String, required: true },
+  winningPartyCode: { type: String },
   decleared: { type: Date },
   ballot: {
     electorate: { type: Number },
