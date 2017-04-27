@@ -1,0 +1,48 @@
+extends ./includes/layout.pug
+
+block content
+
+  if messages.success
+    for success in messages.success
+      .notification.is-success
+        button.delete
+        |  #{success}
+
+  nav.pagination.is-centered
+    ul.pagination-list
+      each letter in "ABCDEFGHIJKLMNOPRSTUVWY".split("")
+        li
+          a.pagination-link(href=`/admin/${letter}`, class= letter == currentLetter ? "is-current" : "") #{letter}
+
+  hr
+
+  table.table.is-bordered.is-striped
+    thead
+      tr
+        th(style='width:30%') Constituency
+        th(style='width:20%') Region
+        th(style='width:10%') Winning Party
+        th(style='width:30%') #
+    tbody
+      if (constituencies.length)
+        each c in constituencies
+          tr
+            td #{c.name}
+            td #{c.region}
+            td #{c.winningPartyCode}
+            td
+              form(method='post')
+                input(type='hidden', name='constituency', value=c.constituency)
+                .field.has-addons
+                  p.control.is-expanded
+                    span.select.is-fullwidth
+                      select(name='partyCode')
+                        option(disabled='',selected) Select Party...
+                        option(value='CON') Conservative
+                        option(value='LAB') Labour
+                        option(value='LD') Liberal Democrats
+                        option(value='GRN') Green
+                        option(disabled='') &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;
+                        option(value='') Clear
+                  p.control
+                    button.button.is-primary(type='submit') Choose
