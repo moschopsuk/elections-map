@@ -1,0 +1,66 @@
+body {
+    font-family: Helmet, Freesans, Helvetica, Arial, sans-serif;
+    margin: 0
+}
+
+/*! normalize.css v2.1.3 | MIT License | git.io/normalize */
+article, aside, details, figcaption, figure, footer, header, hgroup,
+main, nav, section, summary {
+    display: block
+}
+
+audio, canvas, video {
+    display: inline-block
+}
+
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+.main {
+    padding: 0;
+    margin: auto;
+}
+
+.map-wrapper {
+    position: relative;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    border: 1px solid #bfbfbf;
+}
+
+.main-map--container {
+    display: inline-block;
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding-bottom: 111.3%;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+}
+
+.main-map--container .main-map--svg {
+    display: inline-block;
+    position: absolute;
+    background-color: #cfdfec;
+    top: 0;
+    left: 0;
+    -webkit-transform: translateZ(0);
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+}
+
+.main-map--container .main-map--svg .constituency-path {
+    fill: #fff;
+    stroke: #dcdcdc;
+    stroke-width: .05;
+    cursor: pointer;
+}

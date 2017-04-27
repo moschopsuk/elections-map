@@ -1,17 +1,22 @@
 define([
     'backbone',
-    'models/dataFeed'
-], function (Backbone, DataFeed) {
+    'models/dataFeed',
+    'models/partyColours'
+], function (Backbone, DataFeed, PartyColours) {
     return Backbone.Model.extend({
         defaults: {
             'width': 480,
-            'height': 480,
-            'center': [240, 240],
-            'locatorCenter': [240, 240]
+            'height': 538,
+            'translate': [140, 150],
+            'scale': 1,
+            'maxScaleOut': 1,
+            'maxScaleIn': 40,
+            'center': [230, 107],
+            'locatorCenter': [230, 107]
         },
         initialize: function () {
-            this.set('initialMaxScaleOut', this.get('maxScaleOut'));
             this.set('dataFeed', new DataFeed({mapModel: this}));
+            this.set('partyColours', new PartyColours());
         }
     });
 });

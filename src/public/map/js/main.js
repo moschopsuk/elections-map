@@ -13,18 +13,11 @@ define([
   MapModel,
   MapWrapper
 ) {
-  var container = $('.map');
+  var container = $('.main');
   var mapConfig = {
-    'width': 480,
-    'height': 538,
-    'center': [240, 269],
-    'locatorCenter': [240, 269],
-    'mapScale': 1800,
-    'maxScaleOut': 1,
-    'maxScaleIn': 30,
-    'lonLatCenter': [-2.265, 54.4],
-    'bounds': [[-20, 66], [10, 43]],
-    'translate': [290, 265]
+    'translate': [365, 2377],
+    'mapScale': 1993,
+    'bounds': [[-300, -400], [775, 575]],
   };
 
   var Router = Backbone.Router.extend({
@@ -37,7 +30,7 @@ define([
         mapConfig.features = features;
         mapConfig.isLiveUpdating = true;
 
-        var mapModel = new MapModel(config);
+        var mapModel = new MapModel(mapConfig);
         var mapWrapper = new MapWrapper({mapModel: mapModel});
         container.append(mapWrapper.render());
      }
@@ -46,6 +39,8 @@ define([
   var initialize = _.once(function () {
       new Router();
       Backbone.history.start();
-  })();
+  });
+
+  initialize();
 
 });
