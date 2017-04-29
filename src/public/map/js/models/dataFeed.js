@@ -15,7 +15,6 @@ define([
 
             var socket = io.connect('http://localhost:3000');
             socket.on('api:staleData', function() {
-                console.log('data stale');
                 _this.fetch();
             });
         },

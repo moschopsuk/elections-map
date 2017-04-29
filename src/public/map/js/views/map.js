@@ -45,13 +45,13 @@ define([
             var _this = this;
             d3.selectAll('.constituency-path')
             .style('fill', function (d) {
-                    var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
-                    if (constituencyInfo && constituencyInfo.winningPartyCode) {
-                        return _this.partyColours.get(constituencyInfo.winningPartyCode);
-                    } else {
-                        return _this.partyColours.get('OTH');
-                    }
-                })
+                var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
+                if (constituencyInfo && constituencyInfo.winningPartyCode) {
+                    return _this.partyColours.get(constituencyInfo.winningPartyCode);
+                } else {
+                    return _this.partyColours.get('OTH');
+                }
+            })
         },
 
         render: function () {
@@ -69,8 +69,6 @@ define([
             this.svg
                 .call(this.zoom)
                 .call(this.zoom.event)
-
-            console.log('render');
 
             this.positionMap();
             return this.$el;
