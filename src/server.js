@@ -27,7 +27,7 @@ app.locals.pretty = true;
 app.use('/', routes());
 
 server.listen(port, () => {
-  mongoose.connect('mongodb://localhost:32769/elections', { server: { socketOptions: { keepAlive: 1 } } });
+  mongoose.connect('mongodb://localhost:32770/elections', { server: { socketOptions: { keepAlive: 1 } } });
   console.log(`Map: http://127.0.0.1:${port}/map`);
   console.log(`Admin: http://127.0.0.1:${port}/admin`);
   console.log(`iPad: http://127.0.0.1:${port}/ipad`);

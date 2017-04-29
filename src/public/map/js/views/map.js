@@ -49,7 +49,12 @@ define([
                     return 'constituency-path';
                 })
                 .style('fill', function (d) {
-                  return '#333';
+                    var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
+                    if (constituencyInfo && constituencyInfo.winningPartyCode) {
+                        return _this.partyColours.get(constituencyInfo.winningPartyCode);
+                    } else {
+                        return _this.partyColours.get('OTH');
+                    }
                 })
                 .attr('d', this.path);
 
@@ -67,8 +72,6 @@ define([
                 translation;
 
             translation = this.getTranslationFromCentroid(centroid, scale);
-
-            console.log(translation, centroid, scale);
 
             if (translation && scale) {
                 var boundedValues = this.applyScaleBounds(translation, scale, scale);

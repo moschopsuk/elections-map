@@ -2,7 +2,8 @@ requirejs.config({
     baseUrl: 'js',
     paths: {
         app: '.',
-        'jquery': '/jquery/jquery-2.0.3',
+        'jquery': '/js/jquery/jquery-2.0.3',
+        'pubsub': './vendors/pubsub',
         'backbone': './vendors/backbone/backbone',
         'underscore': './vendors/backbone/underscore',
         'd3': './vendors/d3/d3.min',

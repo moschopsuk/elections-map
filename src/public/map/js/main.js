@@ -4,14 +4,16 @@ define([
   'vendors/d3/topojson',
   'data/map.topojson',
   'models/map',
-  'views/mapWrapper'
+  'views/mapWrapper',
+  'pubsub',
 ], function (
   $,
   Backbone,
   Topojson,
   mapTopoJson,
   MapModel,
-  MapWrapper
+  MapWrapper,
+  pubsub
 ) {
   var container = $('.main');
   var mapConfig = {
@@ -31,8 +33,11 @@ define([
         mapConfig.isLiveUpdating = true;
 
         var mapModel = new MapModel(mapConfig);
-        var mapWrapper = new MapWrapper({mapModel: mapModel});
-        container.append(mapWrapper.render());
+
+        pubsub.subscribe('map:hasData', function() {
+          var mapWrapper = new MapWrapper({mapModel: mapModel});
+          container.append(mapWrapper.render());
+        });
      }
   });
 
