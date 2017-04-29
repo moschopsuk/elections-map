@@ -33,11 +33,8 @@ define([
         mapConfig.isLiveUpdating = true;
 
         var mapModel = new MapModel(mapConfig);
-
-        pubsub.subscribe('map:hasData', function() {
-          var mapWrapper = new MapWrapper({mapModel: mapModel});
-          container.append(mapWrapper.render());
-        });
+        var mapWrapper = new MapWrapper({mapModel: mapModel});
+        container.append(mapWrapper.render());
      }
   });
 

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const LiveResults = require('../models/LiveResults');
 
-module.exports = () => {
+module.exports = (io) => {
   const router = Router();
 
   router.post('/:letter', async (req, res) => {
@@ -14,6 +14,7 @@ module.exports = () => {
       req.flash('error', e);
       res.redirect(`/admin/${letter}`);
     }
+    io.sockets.emit('api:staleData');
     req.flash('success', `Updated ${constituency} to ${winningPartyCode}`);
     res.redirect(`/admin/${letter}`);
   });

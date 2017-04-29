@@ -1,7 +1,8 @@
 define([
     'backbone',
     'd3',
-], function (Backbone, d3) {
+    'pubsub',
+], function (Backbone, d3, pubsub) {
     return Backbone.View.extend({
         className: 'main-map--container',
         initialize: function (options) {
@@ -13,6 +14,8 @@ define([
             this.height = this.mapModel.get('height');
             this.d3El = d3.select(this.el);
             this.initMap();
+
+            pubsub.subscribe('map:hasData', this.updateResults.bind(this));
         },
 
         initMap: function () {
@@ -38,6 +41,19 @@ define([
             this.group = this.svg.append('g');
         },
 
+        updateResults: function() {
+            var _this = this;
+            d3.selectAll('.constituency-path')
+            .style('fill', function (d) {
+                    var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
+                    if (constituencyInfo && constituencyInfo.winningPartyCode) {
+                        return _this.partyColours.get(constituencyInfo.winningPartyCode);
+                    } else {
+                        return _this.partyColours.get('OTH');
+                    }
+                })
+        },
+
         render: function () {
             var _this = this;
             
@@ -48,19 +64,13 @@ define([
                 .attr('class', function (d) {
                     return 'constituency-path';
                 })
-                .style('fill', function (d) {
-                    var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
-                    if (constituencyInfo && constituencyInfo.winningPartyCode) {
-                        return _this.partyColours.get(constituencyInfo.winningPartyCode);
-                    } else {
-                        return _this.partyColours.get('OTH');
-                    }
-                })
                 .attr('d', this.path);
 
             this.svg
                 .call(this.zoom)
                 .call(this.zoom.event)
+
+            console.log('render');
 
             this.positionMap();
             return this.$el;
