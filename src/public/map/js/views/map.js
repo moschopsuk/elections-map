@@ -22,6 +22,8 @@ define([
             socket.on('map:cta', (gs) => {
                 this.zoomToConstituency(gs);
             });
+
+            socket.on('map:reset', this.reset.bind(this));
         },
 
         initMap: function () {
@@ -91,6 +93,13 @@ define([
             translation = boundedValues.translation;
             scale = boundedValues.scale;
             this.setTranslationAndScale(translation, scale, true);
+        },
+
+        reset: function() {
+             var centroid = this.mapModel.get('center');
+             var scale = this.mapModel.get('scale');
+             translation = this.getTranslationFromCentroid(centroid, scale);
+             this.setTranslationAndScale(translation, scale, true);
         },
 
         getFeatureFromGssid: function (gssid) {

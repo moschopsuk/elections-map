@@ -16,7 +16,11 @@ block content
             td #{c.region}
             td #{c.winningPartyCode}
             td
-              a.cta.button.is-primary(data-id=c.constituency, href='#', onClick) Zoom
+              .field.is-grouped
+                p.control
+                  a.button.is-primary.cta(data-id=c.constituency, href='#', onClick) Focus
+                p.control
+                  a.button.is-warning.reset(href='#', onClick) Reset
 
 block js
    script.
@@ -26,8 +30,14 @@ block js
           $(".cta").each(function(index) {
              $(this).on('click', function(e) {
                e.preventDefault();
-               console.log($(this).data("id"));
                socket.emit("map:cta", $(this).data("id"));
+             });
+          });
+
+          $(".reset").each(function(index) {
+             $(this).on('click', function(e) {
+               e.preventDefault();
+               socket.emit("map:reset");
              });
           });
       });

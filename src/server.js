@@ -39,4 +39,7 @@ io.on('connection', (s) => {
   s.on('map:cta', (command) => {
     io.sockets.emit('map:cta', command);
   });
+  s.on('map:reset', (command) => {
+    io.sockets.emit('map:reset', command);
+  });
 });
