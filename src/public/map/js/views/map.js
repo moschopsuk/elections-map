@@ -2,7 +2,8 @@ define([
     'backbone',
     'd3',
     'pubsub',
-], function (Backbone, d3, pubsub) {
+    'socket.io'
+], function (Backbone, d3, pubsub, io) {
     return Backbone.View.extend({
         className: 'main-map--container',
         initialize: function (options) {
@@ -16,6 +17,11 @@ define([
             this.initMap();
 
             pubsub.subscribe('map:hasData', this.updateResults.bind(this));
+
+            var socket = io.connect('http://localhost:3000');
+            socket.on('map:cta', (gs) => {
+                this.zoomToConstituency(gs);
+            });
         },
 
         initMap: function () {
@@ -31,6 +37,7 @@ define([
 
             this.zoom = d3.behavior.zoom()
                     .scaleExtent([this.mapModel.get('maxScaleOut'), this.mapModel.get('maxScaleIn')])
+                    .on('zoom', this.zoomHandler.bind(this));
 
             this.svg = d3.select(this.el)
                 .append('svg')
@@ -39,19 +46,6 @@ define([
                 .attr('viewBox', '0 0 ' + this.width + ' ' + this.height);
 
             this.group = this.svg.append('g');
-        },
-
-        updateResults: function() {
-            var _this = this;
-            d3.selectAll('.constituency-path')
-            .style('fill', function (d) {
-                var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
-                if (constituencyInfo && constituencyInfo.winningPartyCode) {
-                    return _this.partyColours.get(constituencyInfo.winningPartyCode);
-                } else {
-                    return _this.partyColours.get('OTH');
-                }
-            })
         },
 
         render: function () {
@@ -74,6 +68,45 @@ define([
             return this.$el;
         },
 
+        updateResults: function() {
+            var _this = this;
+            d3.selectAll('.constituency-path')
+            .style('fill', function (d) {
+                var constituencyInfo = _this.dataFeed.get(d.properties.constituency_gssid);
+                if (constituencyInfo && constituencyInfo.winningPartyCode) {
+                    return _this.partyColours.get(constituencyInfo.winningPartyCode);
+                } else {
+                    return _this.partyColours.get('OTH');
+                }
+            })
+        },
+
+        zoomToConstituency: function(id) {
+            var feature = this.getFeatureFromGssid(id);
+            var tAndS = this.getTranslationAndScaleFromFeature(feature);
+            var translation = tAndS.translation;
+            var scale = tAndS.scale;
+            var boundedValues = this.applyScaleBounds(translation, scale, scale);
+
+            translation = boundedValues.translation;
+            scale = boundedValues.scale;
+            this.setTranslationAndScale(translation, scale, true);
+        },
+
+        getFeatureFromGssid: function (gssid) {
+            var returnFeature = null;
+            for (var prop in this.features) {
+                if (this.features.hasOwnProperty(prop)) {
+                    var feature = this.features[prop];
+                    if (feature.properties.constituency_gssid === gssid) {
+                        returnFeature = feature;
+                        break;
+                    }
+                }
+            }
+            return returnFeature;
+        },
+
         positionMap: function () {
             var centroid = this.mapModel.get('center'),
                 scale = this.mapModel.get('scale'),
@@ -87,6 +120,42 @@ define([
                 scale = boundedValues.scale;
                 this.setTranslationAndScale(translation, scale);
             }
+        },
+
+         getTranslationAndScaleFromFeature: function (feature) {
+            var centroid = this.path.centroid(feature),
+                bounds = this.path.bounds(feature);
+
+            var xDiff =  bounds[1][0] - bounds[0][0],
+                yDiff =  bounds[1][1] - bounds[0][1];
+
+            var scale = (xDiff > yDiff) ? (this.width * 0.6 / xDiff) : (this.height * 0.6 / yDiff);
+
+            return {
+                scale: scale,
+                translation: this.getTranslationFromCentroid(centroid, scale)
+            };
+
+        },
+
+        applyTranslationBounds: function (translation, scale) {
+            translation[0] = Math.min(-this.bounds[0][0] * scale, Math.max(-this.bounds[1][0] * scale + this.width, translation[0]));
+            translation[1] = Math.min(-this.bounds[0][1] * scale, Math.max(-this.bounds[1][1] * scale + this.height, translation[1]));
+            return translation;
+        },
+
+        zoomHandler: function () {
+            this.isPanningOrZoom = true;
+            var scale = d3.event.scale,
+                translation = this.applyTranslationBounds(d3.event.translate, scale);
+            
+            this.setTranslationAndScale(translation, scale);
+
+            var _this = this;
+            clearTimeout(this.panningTimeout);
+            this.panningTimeout = setTimeout(function () {
+                _this.isPanningOrZoom = false;
+            }.bind(this), 250);
         },
 
         getTranslationFromCentroid: function (centroid, scale) {
@@ -120,9 +189,8 @@ define([
                 group.each('end', callback);
             }
 
-            if (this.isInteractive) {
-                this.zoom.translate([translation[0], translation[1]]).scale(scale);
-            }
+            this.zoom.translate([translation[0], translation[1]]).scale(scale);
+
             this.scale = scale;
             this.translation = translation;
         },

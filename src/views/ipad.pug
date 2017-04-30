@@ -1,1 +1,33 @@
 extends ./includes/layout.pug
+
+block content
+  table.table.is-bordered.is-striped
+    thead
+      tr
+        th(style='width:30%') Constituency
+        th(style='width:20%') Region
+        th(style='width:10%') Winning Party
+        th(style='width:30%') #
+    tbody
+      if (constituencies.length)
+        each c in constituencies
+          tr
+            td #{c.name}
+            td #{c.region}
+            td #{c.winningPartyCode}
+            td
+              a.cta.button.is-primary(data-id=c.constituency, href='#', onClick) Zoom
+
+block js
+   script.
+      $(document).ready(function() {
+          var socket = io('http://localhost:3000');
+
+          $(".cta").each(function(index) {
+             $(this).on('click', function(e) {
+               e.preventDefault();
+               console.log($(this).data("id"));
+               socket.emit("map:cta", $(this).data("id"));
+             });
+          });
+      });

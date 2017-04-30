@@ -35,6 +35,8 @@ server.listen(port, () => {
   console.log(`iPad: http://127.0.0.1:${port}/ipad`);
 });
 
-io.on('connection', () => {
-
+io.on('connection', (s) => {
+  s.on('map:cta', (command) => {
+    io.sockets.emit('map:cta', command);
+  });
 });
