@@ -25,7 +25,7 @@ block content
 block js
    script.
       $(document).ready(function() {
-          var socket = io('http://localhost:3000');
+          var socket = io();
 
           $(".cta").each(function(index) {
              $(this).on('click', function(e) {

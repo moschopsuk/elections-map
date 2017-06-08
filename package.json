@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "db:seed": "node scripts/dbseed-archive.js && node scripts/dbseed-live.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "dev:start": "nodemon src/server.js"
   },
   "keywords": [
     "d3",
@@ -27,6 +28,7 @@
     "express": "^4.15.2",
     "express-flash": "0.0.2",
     "express-session": "^1.15.2",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.5",
     "pug": "^2.0.0-beta.12",
     "socket.io": "^1.7.3"
@@ -36,6 +38,7 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3"
+    "eslint-plugin-react": "^6.10.3",
+    "nodemon": "^1.11.0"
   }
 }

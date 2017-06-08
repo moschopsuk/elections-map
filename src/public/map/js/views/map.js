@@ -18,7 +18,7 @@ define([
 
             pubsub.subscribe('map:hasData', this.updateResults.bind(this));
 
-            var socket = io.connect('http://localhost:3000');
+            var socket = io.connect();
             socket.on('map:cta', (gs) => {
                 this.zoomToConstituency(gs);
             });
@@ -164,7 +164,7 @@ define([
             clearTimeout(this.panningTimeout);
             this.panningTimeout = setTimeout(function () {
                 _this.isPanningOrZoom = false;
-            }.bind(this), 250);
+            }.bind(this), 500);
         },
 
         getTranslationFromCentroid: function (centroid, scale) {

@@ -16,7 +16,7 @@ mongoose.Promise = Promise;
 const csv = fs.readFileSync(`${__dirname}/sources/hocl-ge2015-results-summary.csv`, 'utf8');
 const results = parse(csv, { columns: true });
 
-mongoose.connect('mongodb://localhost:32769/elections', async (err) => {
+mongoose.connect('mongodb://localhost:32770/elections', async (err) => {
   if (err) {
     throw err;
   }

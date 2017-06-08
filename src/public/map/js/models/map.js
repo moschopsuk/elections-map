@@ -5,14 +5,13 @@ define([
 ], function (Backbone, DataFeed, PartyColours) {
     return Backbone.Model.extend({
         defaults: {
-            'width': 480,
-            'height': 538,
+            'width': 1080,
+            'height': 1920,
             'translate': [140, 150],
-            'scale': 1,
+            'scale': 3,
             'maxScaleOut': 1,
             'maxScaleIn': 40,
-            'center': [230, 107],
-            'locatorCenter': [230, 107]
+            'center': [250, 107],
         },
         initialize: function () {
             this.set('dataFeed', new DataFeed({mapModel: this}));

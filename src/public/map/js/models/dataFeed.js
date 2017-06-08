@@ -5,7 +5,7 @@ define([
 ], function (Backbone, pubsub, io) {
     return Backbone.Model.extend({
         url: function () {
-            return 'http://localhost:3000/api/results'
+            return '/api/results'
         },
         initialize: function (options) {
             this.on('change', this.notify, this);
@@ -13,7 +13,7 @@ define([
             this.mapModel = options.mapModel;
             this.fetch();
 
-            var socket = io.connect('http://localhost:3000');
+            var socket = io.connect();
             socket.on('api:staleData', function() {
                 _this.fetch();
             });

@@ -5,7 +5,9 @@ module.exports = () => {
   const router = Router();
 
   router.get('/', async (req, res) => {
-    const constituencies = await LiveResults.find({ winningPartyCode: { $exists: true, $ne: '' } }).exec();
+    const constituencies = await LiveResults.find({ winningPartyCode: { $exists: true, $ne: '' } })
+                                            .sort({ declared: -1 })
+                                            .exec();
     res.render('ipad', { constituencies });
   });
 

@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const LiveResults = require('../models/LiveResults');
+const moment = require('moment');
 
 module.exports = (io) => {
   const router = Router();
@@ -8,8 +9,10 @@ module.exports = (io) => {
     const constituency = req.body.constituency;
     const winningPartyCode = req.body.partyCode;
     const letter = req.params.letter;
+    const declared = (winningPartyCode !== '') ? moment() : '';
+
     try {
-      await LiveResults.update({ constituency }, { $set: { winningPartyCode } });
+      await LiveResults.update({ constituency }, { $set: { winningPartyCode, declared } });
     } catch (e) {
       req.flash('error', e);
       res.redirect(`/admin/${letter}`);
